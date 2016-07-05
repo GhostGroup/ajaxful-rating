@@ -18,7 +18,7 @@ module AjaxfulRating # :nodoc:
     #     ajaxful_rateable :stars => 10, :cache_column => :custom_column
     #   end
     def ajaxful_rateable(options = {})
-      options[:class_name] ||= 'Rate'
+      options[:class_name] ||= :Rate
       has_many :rates_without_dimension, -> { where(:dimension => nil) }, :as => :rateable, :class_name => options[:class_name], :dependent => :destroy
       has_many :raters_without_dimension, :through => :rates_without_dimension, :source => :rater
 
@@ -39,7 +39,7 @@ module AjaxfulRating # :nodoc:
 
       if options[:dimensions].is_a?(Array)
         options[:dimensions].each do |dimension|
-          has_many "#{dimension}_rates", -> { where(:dimension => dimension.to_s) }, :dependent => :destroy, :class_name => 'Rate', :as => :rateable
+          has_many "#{dimension}_rates", -> { where(:dimension => dimension.to_s) }, :dependent => :destroy, :class_name => :Rate, :as => :rateable
           has_many "#{dimension}_raters", :through => "#{dimension}_rates", :source => :rater
 
           axr_config(dimension).update(options)
@@ -55,7 +55,7 @@ module AjaxfulRating # :nodoc:
 
     # Makes the association between user and Rate model.
     def ajaxful_rater(options = {})
-      has_many :ratings_given, options.merge(:class_name => "Rate", :foreign_key => :rater_id)
+      has_many :ratings_given, options.merge(:class_name => :Rate, :foreign_key => :rater_id)
     end
   end
 
